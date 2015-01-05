@@ -1,0 +1,25 @@
+#!/bin/bash
+#
+# This script runs strace on any newly-started Docker container
+#
+# Written by Amr S. Abed <AmrAbed@vt.edu>
+#
+# Last updated Dec 25, 2014
+
+cd "$(dirname "$0")"
+
+WORKDIR=data
+
+[ ! -d $WORKDIR ] && mkdir $WORKDIR 
+
+cd $WORKDIR && touch log
+
+docker events -f event=start >> log &
+
+while inotifywait -qq -e modify log; do
+  new_line=$(tail -1 log)
+  time=$(echo $new_line | awk -W interactive '{print $1}' | cut -c1-19) 
+  id=$(echo $new_line | awk -W interactive '{print $2}' | cut -c1-64) 
+  out_file=$(echo $id | cut -c1-12)_$time
+  [ ! -f $out_file ] && strace -o $out_file -f -C -qq -S calls $(sed 's/\([0-9]*\)/\-p \1/g' /sys/fs/cgroup/devices/docker/$id/tasks) &
+done

@@ -1,0 +1,18 @@
+#!/bin/bash
+
+INPUT=./data
+OUTPUT=../output
+
+cd $INPUT
+
+[ -d $OUTPUT ] && rm -r $OUTPUT
+
+mkdir $OUTPUT
+
+for file in *; do
+  [ $file == log ] && continue
+  echo -n Extracting data from $file ...
+  gawk '1{p=1} /% time/{p=0} p{match($2, "[a-z_]+", a)}{if(a[0]) print a[0]}' $file > $OUTPUT/"$file"_trace
+  gawk -v n=$(($(wc -l < $file) - 1)) '/% time/{l=NR} l && NR>=l+2 && NR<n  {print $NF "\t" $4}' $file | sort -k2 -nr > $OUTPUT/"$file"_count
+  echo " done"
+done
