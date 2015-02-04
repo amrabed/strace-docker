@@ -1,7 +1,11 @@
 .gitignore
 
-*.class
+commands
 
+*.class
+*.java
+
+results/
 output/
 data/
 old/
