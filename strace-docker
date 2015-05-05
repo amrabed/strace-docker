@@ -4,7 +4,7 @@
 #
 # Written by Amr S. Abed <AmrAbed@vt.edu>
 #
-# Last updated Jan 12, 2015
+# Last updated May 5, 2015
 
 cd "$(dirname "$0")"
 
@@ -18,10 +18,10 @@ docker events -f event=start >> log &
 
 while inotifywait -qq -e modify log; do
   new_line=$(tail -1 log)
-  timestamp=$(echo $new_line | gawk '{print substr($1, 0, 19)}')
+  timestamp=$(echo $new_line | gawk '{tmp=substr($1, 0, 19)}{gsub(/:|-|T/,"",tmp)}{print tmp}')
   id=$(echo $new_line | gawk '{print substr($2, 0, 64)}')
-  image=$(echo $new_line | gawk '{match($4, "[a-z/]+", a)}{print a[0]}')
-  out_file=$timestamp-$image-$(echo $id | cut -c1-12)
-  sleep 0.01
-  [ ! -f $out_file ] && strace -o $out_file -f -C -qq -S calls $(sed 's/\([0-9]*\)/\-p \1/g' /sys/fs/cgroup/devices/docker/$id/tasks) &
+  image=$(echo $new_line | gawk '{match($4, "[a-z/]+", a)}{gsub(/\//, "_", a[0])}{print a[0]}')
+  out_file=$(echo $id | cut -c1-12)-$image-$timestamp
+#  sleep 0.1
+  strace -o "$out_file" -f -C -qq -S calls $(sed 's/\([0-9]*\)/\-p \1/g' /sys/fs/cgroup/devices/docker/$id/tasks) &
 done
