@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# Install inotifywait
+if ! type aws > /dev/null; then
+  apt-get install -y inotify-tools
+fi
+
+#Install Docker
+if ! type docker > /dev/null; then
+  wget -qO- https://get.docker.com/ | sh && usermod -aG docker ubuntu
+fi
+
 cp strace-docker /usr/bin
 cp etc/init.d/strace-docker /etc/init.d
 update-rc.d strace-docker defaults
