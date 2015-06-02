@@ -24,6 +24,6 @@ while inotifywait -qq -e modify log; do
   out_file=$(echo $id | cut -c1-12)-$image-$timestamp
   pid=$(docker inspect -f '{{.State.Pid}}' $id)
   sleep 0.1
-  strace -o "$out_file" -f -C -qq -S calls $pid &
+  strace -o "$out_file" -f -C -qq -S calls -p $pid &
 #  strace -o "$out_file" -f -C -qq -S calls $(sed 's/\([0-9]*\)/\-p \1/g' /sys/fs/cgroup/devices/docker/$id/tasks) &
 done
