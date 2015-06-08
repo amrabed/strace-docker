@@ -7,9 +7,14 @@ if ! type aws > /dev/null; then
   apt-get install -y inotify-tools
 fi
 
-#Install Docker
+# Install Docker
 if ! type docker > /dev/null; then
   wget -qO- https://get.docker.com/ | sh && usermod -aG docker ubuntu
+fi
+
+# Install Sysdig
+if ! type sysdig > /dev/null; then
+  curl -s https://s3.amazonaws.com/download.draios.com/stable/install-sysdig | bash
 fi
 
 cp strace-docker /usr/bin
