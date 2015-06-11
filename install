@@ -3,7 +3,7 @@
 cd "$(dirname "$0")"
 
 # Install inotifywait
-if ! type aws > /dev/null; then
+if ! type inotifywait > /dev/null; then
   apt-get install -y inotify-tools
 fi
 
