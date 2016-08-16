@@ -9,7 +9,7 @@ fi
 
 # Install Docker
 if ! type docker > /dev/null; then
-  wget -qO- https://get.docker.com/ | sh && usermod -aG docker ubuntu
+  wget -qO- https://get.docker.com/ | sh && usermod -aG docker $USER
 fi
 
 # Install Sysdig
