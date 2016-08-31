@@ -20,7 +20,7 @@ while inotifywait -qq -e modify log; do
   new_line=$(tail -1 log)
   timestamp=$(echo $new_line | gawk '{tmp=substr($1, 0, 19)}{gsub(/:|-|T/,"",tmp)}{print tmp}')
   id=$(echo $new_line | gawk '{print substr($4, 0, 12)}')
-  image=$(echo $new_line | gawk '{match($5, "image=([a-z/]+)", a)}{gsub(/\//, "_", a[1])}{print a[1]}')
+  image=$(echo $new_line | gawk '{match($0, "image=([a-z/]+)", a)}{gsub(/\//, "_", a[1])}{print a[1]}')
   out_file=$id-$image-$timestamp
   sysdig -p"%thread.tid %evt.type" container.id=$id and evt.type!=switch > $out_file &
 done
