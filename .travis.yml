@@ -1,5 +1,3 @@
 language: bash
 
 install: sudo ./install
-
-script: sudo ./strace-docker
