@@ -1,5 +1,5 @@
 language: bash
 
-install: ./install
+install: sudo ./install
 
-script: ./strace-docker
+script: sudo ./strace-docker
