@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# This script runs Sysdig on any newly-started Docker container
+#
+# Written by Amr S. Abed <AmrAbed@vt.edu>
+#
+# Last updated June 8, 2015
+
+cd "$(dirname "$0")"
+
+LOGDIR=/var/log/strace-docker
+
+[ ! -d $LOGDIR ] && mkdir $LOGDIR
+
+cd $LOGDIR && touch log
+
+#docker events -f event=start >> log &
+
+DIR=/var/lib/docker/containers
+inotifywait -m $DIR -e create |
+  while read path action file; do
+    config=$(cat $DIR/$file/config.v2.json)
+    id=$(echo $file | gawk '{print substr($0, 0, 12)}')
+    image=$(echo $config | gawk '{match($0, "\"Image\":\"([a-z/]+)", a)}{gsub(/\//, "_", a[1])}{print a[1]}')
+    timestamp=$(echo $config | gawk '{match($0, "\"Created\":\"([0-9T:\\-]+)", a)}{gsub(/:|-|T/,"",a[1])}{print a[1]}')
+    echo New container $id created from $image at $timestamp >> log
+    out_file=$id-$image-$timestamp
+    sysdig -p"%thread.tid %evt.type" container.id=$id and evt.type!=switch > $out_file &
+  done

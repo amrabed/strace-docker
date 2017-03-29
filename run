@@ -1,0 +1,7 @@
+#!/bin/bash
+cd "$(dirname "$0")"
+
+[ ! -d $WORKDIR ] && mkdir log && touch log/log
+docker events --filter 'event=start' >> log/log &
+docker-compose up -d
+

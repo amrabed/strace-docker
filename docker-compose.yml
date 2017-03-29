@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  strace-docker:
+    build: .
+    image: amrabed/strace-docker
+    container_name: strace-docker
+    volumes: 
+      - ~/strace-docker/log:/var/log/strace-docker
+      - /var/lib/docker:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /dev:/dev
+      - /boot:/boot:ro
+      - /lib/modules:/lib/modules:ro
+      
