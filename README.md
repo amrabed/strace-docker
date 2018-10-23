@@ -1,6 +1,9 @@
-# strace-docker
 [![Build Status](https://travis-ci.org/amrabed/strace-docker.svg?branch=master)](https://travis-ci.org/amrabed/strace-docker)
+[![GitHub issues](https://img.shields.io/github/issues/amrabed/strace-docker.svg)](https://github.com/amrabed/strace-docker/issues)
+[![GitHub (pre-)release](https://img.shields.io/github/release/amrabed/strace-docker/all.svg)](https://github.com/amrabed/strace-docker/releases)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+# strace-docker
 Trace system calls from Docker containers running on the system<a href="#footnote" id="ref"><sup>*</sup></a>
 
 
