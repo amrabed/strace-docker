@@ -16,6 +16,9 @@ To check if `strace-docker` is successfully installed and running, use `service 
 ### Tracing
 `strace-docker` is automatically triggered by [`docker events`](https://docs.docker.com/engine/reference/commandline/events) to monitor any new Docker container. The resulting trace of system calls is written to a new file at `/var/log/strace-docker/`. File name will be `$id-$image-$timestamp` where `$id` is the container ID, `$image` is the container image, and `$timestamp` is the time the container started. You can see full log of monitored containers at `/var/log/strace-docker/log`.
 
+[![How to use the strace-docker tool](https://img.youtube.com/vi/iWywV_4Y34E/0.jpg)](https://www.youtube.com/watch?v=iWywV_4Y34E)
+
+
 ## Known Issues
 - `strace-docker` does not currently stop tracing process automatically when container is stopped.
 - `strace-docker` does not resume tracing to the same file on container restart.
